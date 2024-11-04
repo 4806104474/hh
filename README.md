@@ -66,7 +66,28 @@ icecream.composition()
 
 ### 3) Петя – начинающий программист и на занятиях ему сказали реализовать икапсу…что-то. А вы хороший друг Пети и ко всему прочему прекрасно знаете, что икапсу…что-то – это инкапсуляция, поэтому решаете помочь вашему другу с написанием класса с инкапсуляцией. Ваш класс будет не просто инкапсуляцией, а классом с сеттером, геттером и деструктором. После написания класса вам необходимо продемонстрировать что все написанные вами функции работают. Также вас необходимо объяснить Пете почему на скриншоте ниже в консоли выводится ошибка.
 ```python
+class MyClass:
+    def __init__(self,value):
+        self._value=value
 
+    def set_value(self, value):
+        self._value=value
+
+    def get_value(self):
+        return self._value
+    def del_value(self):
+        del self._value
+
+    value= property(get_value,set_value, del_value, "Свойства value")
+
+obj=MyClass(42)
+print(obj.get_value())
+obj.set_value(45)
+print(obj.get_value())
+obj.set_value(100)
+print(obj.get_value())
+obj.del_value()
+print(obj.get_value())
 ```
 
 ### Результат
