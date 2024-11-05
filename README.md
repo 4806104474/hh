@@ -194,101 +194,119 @@ greet(john)
 4) Создайте метод harvest(), который проверяет, все ли плоды созрели. Если все, то садовник собирает урожай. Если нет, то метод печатает предупреждение
 5) Создайте статический метод knowledge_base(), который выведет в консоль справку по садоводству
 
-Тесты: 
-1) Вызовите справку по садоводству
-2) Создайте объекты классов TomatoBush и Gardener
-3) Используя объект класса Gardener, поухаживайте за кустом с помидорами
-4) Попробуйте собрать урожай, когда томаты еще не дозрели. Продолжайте ухаживать за ними
-5) Соберите урожай
 Результатом работы вашей программы будет листинг кода с подробными комментариями и скриншоты выполенния всех тестов.
 ```python
 class Tomato:
-    
-    states = {'Отсутствует': 0, 'Цветение': 1, 'Зеленый': 2, 'Красный': 3}
-    
+    _states = {0: 'отсутсвует',
+               1: 'цветение',
+               2: 'зелёный',
+               3: 'красный'}
+    # Объявление статического атрибута, который содержит все состояния созревания помидорок
     def __init__(self, index):
         self._index = index
-        self._state = self.states['Отсутствует']
-        
+        self._states = self._states[0]
+        # Динамические атрибуты
+        # в _states находится первый элемент статического словаря
+        #Эти два свойства являются защищёнными атрибутами
+
     def grow(self):
-        if self._state < 3:
-            self._state += 1
-        
+        key_value_now = list(Tomato._states.values()).index(self._states) + 1
+        # Определение индекса следующего состояния созревания помидорки.
+        if key_value_now>3:
+            key_value_now = 0
+        # Границы кюча от 0 до 3, чтобы находиться в рамках словаря
+        self._states = Tomato._states[key_value_now]
+        # Новое состояние помидора!
+        print(self._states)
     def is_ripe(self):
-        return True if self._state == 3 else False
- 
+        # Если состояние помидорки = 'red', то помидорка считается зрелой
+        if self._states==Tomato._states[3]:
+            print(f"Помидорка {self._index} созрела!")
+        else:
+            print(f"Помидорка {self._index} ещё не созрела.")
+
 class TomatoBush:
-    
-    def __init__(self, num):
-        self.tomatoes = [Tomato(index) for index in range(1, num+1)]
-        
+    def __init__(self, amount):
+        self.amount = amount
+        self.tomatoes = [Tomato(i) for i in range(amount)] #Создание списка из экземпляоров класса Tomato
+
     def grow_all(self):
-        for tomato in self.tomatoes:
-            tomato.grow()
-            
+        for i in self.tomatoes:
+            i.grow() #обновляем статус зрелости каждой помидорки на +1
+
     def all_are_ripe(self):
-        return all([tomato.is_ripe() for tomato in self.tomatoes])
-    
+        count = 0
+        for i in self.tomatoes:
+            if i._states == Tomato._states[3]:
+                count = count+1 # Считаем количество созревших помидорок
+            else:
+                break
+        return count == self.amount
+        # Если счётчик равен количеству помидорок на кусте, то возвращаем True
+
     def give_away_all(self):
-        self.tomatoes = []
- 
+        self.tomatoes = [Tomato(i) for i in range(self.amount)]
+        # Чистим список
+
 class Gardener:
-    
     def __init__(self, name, plant):
         self.name = name
         self._plant = plant
-        
+
+        #name - публичный атрибут, _plant - защищённый
+
     def work(self):
-        self._plant.grow_all()
-        
+        self._plant.grow_all() # С помощью метода класса TomatoBush помогаем помидоркам быстрее созреть
+        print(f"{self.name} ухаживает за помидорками.")
     def harvest(self):
         if self._plant.all_are_ripe():
-            print('Урожай собран!')
-            self._plant.give_away_all()
+            print("Ура, всё созрело! Идём собирать урожай!")
         else:
-            print('Томаты еще не дозрели')
-            
+            print("Ещё рано собирать урожай, остались зелёные помидорки!")
     @staticmethod
-    def knowledge_base():
-        print('Справка по садоводству:')
-        print('1. Не забывайте регулярно поливать и подкармливать растения')
-        print('2. Определите правильное расстояние между растениями, чтобы они не мешали друг другу в росте')
-        print('3. Удалите поврежденные листья и плоды, чтобы предотвратить распространение болезней')
-        
-# Вызов справки по садоводству
-Gardener.knowledge_base()
- 
-# Создание объектов классов TomatoBush и Gardener
-bush = TomatoBush(5)
-gardener = Gardener('John', bush)
- 
-# Уход за кустом с помидорами
-gardener.work()
-gardener.work()
-gardener.work()
- 
-# Сбор урожая
-gardener.harvest()
- 
-# Продолжение ухода за кустом, пока томаты не дозреют
-gardener.work()
-gardener.harvest()
-gardener.work()
-gardener.harvest()
-gardener.work()
-gardener.harvest()
-# Сбор урожая после дозревания всех томатов
-gardener.work()
-gardener.harvest()
+    def knowladge_base():
+        print("Справка по садоводству:")
+        print("1) Помидорки имеют 4 стадии созревания: отсутсвует, цветение, зелёные, красные")
+        print("2) Садовник может за ними ухаживать или их собирать")
+        print("3) Растение считается спелым, когда все помидорки на кусте покраснели")
 
+tomatoBush = TomatoBush(5)
+gardener = Gardener("Ирина", tomatoBush)
+Gardener.knowladge_base()
+print(" ")
+gardener.work()
+print(" ")
+gardener.harvest()
+print(" ")
+gardener.work()
+print(" ")
+gardener.work()
+print(" ")
+gardener.harvest()
 ```
+Тесты:
 
-### Результат
+### 1) Вызовите справку по садоводству
+
+![Меню]()
+### 2) Создайте объекты классов TomatoBush и Gardener
+
+![Меню]()
+### 3) Используя объект класса Gardener, поухаживайте за кустом с помидорами
+
+![Меню]()
+### 4) Попробуйте собрать урожай, когда томаты еще не дозрели. Продолжайте ухаживать за ними
+
+![Меню]()
+### 5) Соберите урожай
+
 ![Меню]()
 ### Вывод
-
-
-
+1. Класс Tomato реализует логику роста и проверки зрелости помидора.
+2. Класс TomatoBush управляет коллекцией помидоров, предоставляя методы для их обработки.
+3. Класс Gardener отвечает за уход за помидорами и сбор урожая.
+4. Метод knowladge_base() предоставляет справку по садоводству.
+5. Методы work() и harvest() демонстрируют взаимодействие между грядкой и садовником.
 
   ## Вывод
-
+На основе всех представленных выше заданий можно сделать выводы о том, как можно представить сложную систему с взаимодействующими компонентами, используя объектно-ориентированный подход в Python, как можно организовать код в виде модульной системы классов.
