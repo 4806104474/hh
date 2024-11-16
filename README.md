@@ -143,14 +143,14 @@ def timing_decorator(func):
     return wrapper
 
 @timing_decorator
-def fibonacci():
-    fib1 = fib2 = 1
+def icid():
+    ici1 = ici2 = 1
     for i in range(2, 200):
-        fib1, fib2 = fib2, fib1 + fib2
-        print(fib2, end='')
+        ici1, ici2 = ici2, ici1 + ici2
+        print(ici2, end='')
 
 if __name__ == '__main__':
-    fibonacci()
+    icid()
 ```
 
 ### Результат.
@@ -185,13 +185,13 @@ def read_file(file_path):
 if __name__ == '__main__':
     # Пример использования для пустого файла
     print("Для пустого файла:")
-    read_file('aboba_file.txt')
+    read_file('notes.txt')
 
     print("\n" + "="*30 + "\n")
 
     # Пример использования для файла с информацией
     print("Для файла с информацией:")
-    read_file('pupu.txt')
+    read_file('input.txt')
 ```
 
 ### Результат.
