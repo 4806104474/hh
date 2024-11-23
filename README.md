@@ -108,11 +108,9 @@ def fib(n):
         yield a
         a, b = b, a + b
 
-# Генерируем 200 чисел Фибоначчи
 fibonacci_generator = fib(200)
 fibonacci_numbers = list(fibonacci_generator)
 
-# Выводим 200-е число Фибоначчи
 print(f"200-е число Фибоначчи: {fibonacci_numbers[199]}")
 
 ```
@@ -133,15 +131,14 @@ def fib(n):
         yield a
         a, b = b, a + b
 
-# Генерируем 200 чисел Фибоначчи
+
 fibonacci_numbers = list(fib(200))
 
-# Записываем числа Фибоначчи в файл
 with open("fib.txt", "w") as file:
     for number in fibonacci_numbers:
         file.write(f"{number}\n")
 
-# Выводим 200-е число Фибоначчи
+
 print(f"200-е число Фибоначчи: {fibonacci_numbers[199]}")
 
 ```
